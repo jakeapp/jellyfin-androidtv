@@ -571,7 +571,7 @@ public class CustomPlaybackOverlayFragment extends Fragment implements IPlayback
                     }
 
                     if (!mIsVisible) {
-                        if (!DeviceUtils.isFireTv() && !mPlaybackController.isLiveTv()) {
+                        if (!mPlaybackController.isLiveTv()) {
                             if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                                 mPlaybackController.skip(30000);
                                 mIsVisible = true;
