@@ -77,7 +77,7 @@
     <string name="lbl_valid_server_address">Zadejte prosím adresu serveru (IP nebo doména/název stroje)</string>
     <string name="lbl_ok">Ok</string>
     <string name="lbl_born">"Narozen "</string>
-    <string name="lbl_loading_elipses">Načítá se...</string>
+    <string name="lbl_loading_elipses">Načítá se…</string>
     <string name="msg_playback_not_allowed">Přehrávání v této době není povoleno</string>
     <string name="msg_playback_restricted">Správce má omezenou přehrávání této položky v této době</string>
     <string name="msg_playback_incompatible">Nelze přehrát tento video formát</string>
@@ -140,7 +140,7 @@
     <string name="btn_filter">Filtr</string>
     <string name="btn_clear_all">Smazat vše</string>
     <string name="lbl_filters">Filtry</string>
-    <string name="msg_subtitles_loading">Načítají se titulky...</string>
+    <string name="msg_subtitles_loading">Načítají se titulky…</string>
     <string name="msg_unable_load_subs">Nelze načíst titulky</string>
     <string name="msg_burn_sub_warning">Vypálení titulků může trvat několik minut. Čekejte, prosím…</string>
     <string name="lbl_recording">Nahrávání</string>
@@ -185,10 +185,7 @@
     <string name="lbl_current_queue">Aktuální fronta</string>
     <string name="btn_got_it">Beru na vědomí</string>
     <string name="msg_external_path">Tato volba bude fungovat pouze v případě správného nastavení knihovny na serveru se síťovými cestami nebo nahrazením cest a Vámi používaný klient má přímý přístup k těmto síťovým umístěním.</string>
-    <string name="lbl_vertical_stretch">Svislé roztáhnutí</string>
-    <string name="lbl_horizontal_stretch">Vodorovné roztáhnutí</string>
     <string name="lbl_zoom">Přiblížení</string>
-    <string name="lbl_normal">Běžný</string>
     <string name="desc_bitstream_ac3">Vyžaduje výkonný hardware</string>
     <string name="lbl_bitstream_ac3">Bitstream Dolby Digital zvuk</string>
     <string name="lbl_new_premieres">Nové premiéry</string>
@@ -199,14 +196,14 @@
     <string name="lbl_warning">Varování</string>
     <string name="sum_enable_cinema_mode">Pokud je povoleno na serveru, zobrazovat úvodníky a náhledy před přehráváním filmu</string>
     <string name="lbl_direct_stream_live">Přímý televizní přenos</string>
-    <string name="msg_error_live_stream">Chyba při přenosu televizního vysílání. Opakování pokusu...</string>
+    <string name="msg_error_live_stream">Chyba při přenosu televizního vysílání. Opakování pokusu…</string>
     <string name="lbl_now_playing_album">z %1$s</string>
-    <string name="lbl_now_playing_track">%s z %s</string>
+    <string name="lbl_now_playing_track">%1$s z %2$s</string>
     <string name="msg_error_server_unavailable">Server nedostupný</string>
     <string name="lbl_watched">Zhlédnuto</string>
     <string name="lbl_favorite">Oblíbené</string>
     <string name="lbl_series">Seriály</string>
-    <string name="lbl_status">%s / %s</string>
+    <string name="lbl_status">%1$s / %2$s</string>
     <string name="pref_authentication_cat">Ověření</string>
     <string name="loading">Načítání…</string>
     <string name="pref_use_direct_path_summary">Přímé přehrávání namísto streamování</string>
@@ -344,9 +341,7 @@
     <string name="lbl_audio_track">Vybrat zvukovou stopu</string>
     <string name="lbl_pause">Pozastavit</string>
     <string name="lbl_playback_control_ends">Končí v %1$s</string>
-    <string name="lbl_manual_login">Ruční přihlášení</string>
     <string name="lbl_sign_in">Prosím přihlaste se</string>
-    <string name="lbl_add_server">Přidat server</string>
     <string name="watch_count_overflow">99+</string>
     <string name="pref_default_rating">Výchozí typ hodnocení</string>
     <string name="lbl_tomatoes">Rajčata</string>
@@ -362,12 +357,10 @@
     <string name="login_authenticating">Ověřování uživatele…</string>
     <string name="server_field_empty">Adresa nesmí být prázdná</string>
     <string name="server_connection_failed">Nelze se připojit k serveru: %1$s</string>
-    <string name="server_connecting">Připojování k %s</string>
-    <string name="connect_title">Připojit</string>
+    <string name="server_connecting">Připojování k %1$s</string>
     <string name="login_help_description">Jellyfin vyžaduje server, ke kterému se může připojit. Chcete-li zjistit, jak začít Jellyfin používat, podívejte se na dokumentaci na docs.jellyfin.org nebo naskenujte QR kód.</string>
     <string name="login_help_title">Potřebujete pomoc\?</string>
     <string name="connect_manually_by_address">Zadejte adresu serveru</string>
-    <string name="connect_manually_title">Ruční připojení</string>
     <string name="discovered_servers_empty">Na místní síti nebyly nalezeny žádné servery.</string>
     <string name="discovered_servers_title">Nalezené servery</string>
     <string name="lbl_hidden">Skryté</string>
@@ -434,9 +427,20 @@
     <string name="who_is_watching">Kdo se bude dívat\?</string>
     <string name="no_user_warning">Nebyli nalezení žádné uživatelé!
 \nNov0ho uživatele přidejte stisknutím tlačítka \"Přidat uživatele\".</string>
-    <string name="server_unsupported">Server je nutné aktualizovat. Aktuální verze je %s, ale aplikace vyžaduje verzi %s nebo novější</string>
+    <string name="server_unsupported">Server je nutné aktualizovat. Aktuální verze je %1$s, ale aplikace vyžaduje verzi %2$s nebo novější</string>
     <string name="welcome_content">Začněte připojením k serveru.</string>
     <string name="welcome_title">Vítejte v Jellyfin!</string>
     <string name="saved_servers">Uložené servery</string>
     <string name="pref_next_up_behavior_title">Zobrazit informace o dalším videu</string>
+    <string name="enable_playback_module_description">Toto je experimentální funkce bez jakékoliv podpory.</string>
+    <string name="enable_playback_module_title">Povolit nový přehrávací modul</string>
+    <string name="lbl_fit">Normální</string>
+    <string name="lbl_stretch">Roztáhnout</string>
+    <string name="lbl_auto_crop">Automatický ořez</string>
+    <string name="alphabetical">Abecedně</string>
+    <string name="last_use">Naposledy použité</string>
+    <string name="advanced_settings">Nastavení (pokročilé)</string>
+    <string name="always_authenticate_description">Zapnutím této funkce bude vypnuto automatické přihlášení</string>
+    <string name="always_authenticate">Vždy vyžadovat přihlášení</string>
+    <string name="lbl_community_rating">Uživatelské hodnocení</string>
 </resources>

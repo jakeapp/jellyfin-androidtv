@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="video_error_unknown_error">Fallo al cargar el video</string>
+    <string name="video_error_unknown_error">Error al cargar el video</string>
     <string name="btn_cancel">Cancelar</string>
     <string name="byletter_letters">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ</string>
     <string name="pref_playback">Reproducción</string>
@@ -182,10 +182,7 @@
     <string name="lbl_new_premieres">Nuevos estrenos</string>
     <string name="lbl_bitstream_ac3">Transmisión directa de audio Dolby Digital</string>
     <string name="desc_bitstream_ac3">Requiere un hardware compatible</string>
-    <string name="lbl_normal">Normal</string>
     <string name="lbl_zoom">Zoom</string>
-    <string name="lbl_horizontal_stretch">Estiramiento horizontal</string>
-    <string name="lbl_vertical_stretch">Estiramiento vertical</string>
     <string name="btn_got_it">Hecho</string>
     <string name="lbl_current_queue">Cola actual</string>
     <string name="desc_current_video_queue">Elementos de video actualmente en cola para reproducción</string>
@@ -345,9 +342,7 @@
     <string name="lbl_pause">Pausa</string>
     <string name="watch_count_overflow">99+</string>
     <string name="lbl_playback_control_ends">Termina en %1$s</string>
-    <string name="lbl_manual_login">Ingreso manual</string>
     <string name="lbl_sign_in">Por favor, Regístrese</string>
-    <string name="lbl_add_server">Agregar Servidor</string>
     <string name="image_type_banner">Banner</string>
     <string name="image_type_thumbnail">Miniatura</string>
     <string name="image_type_default">Predeterminado</string>
@@ -394,11 +389,9 @@
     <string name="lbl_episode_marks">Solamente en episodios</string>
     <string name="lbl_hide_unwatched_count">Ocultar contador de contenido sin ver</string>
     <string name="pref_watched_indicator">Mostrar indicadores de contenido visto</string>
-    <string name="connect_title">Conectar</string>
     <string name="login_help_description">Jellyfin requiere de un servidor al cual conectarse. Visita nuestra documentación en docs.jellyfin.org o escanea el código QR para comenzar a usar Jellyfin.</string>
     <string name="login_help_title">¿Necesita ayuda\?</string>
     <string name="connect_manually_by_address">Introducir dirección del servidor</string>
-    <string name="connect_manually_title">Conectar de forma manual</string>
     <string name="discovered_servers_empty">No se encontraron servidores en la red local.</string>
     <string name="discovered_servers_title">Servidores descubiertos</string>
     <string name="lbl_hidden">Oculto</string>
@@ -439,4 +432,15 @@
     <string name="lbl_starting_on_schedule_ending_after">Comenzar en programación y finalizar %1$s después del programa</string>
     <string name="lbl_starting_early_ending_on_schedule">Comenzar %1$s antes y finalizar en programación</string>
     <string name="lbl_starting_early_ending_after">Comenzar %1$s antes y finalizar %2$s después de la programación</string>
+    <string name="enable_playback_module_description">Ésta característica es experimental. No tiene soporte.</string>
+    <string name="enable_playback_module_title">Habilitar nuevo modulo de reproducción</string>
+    <string name="lbl_fit">Normal</string>
+    <string name="lbl_stretch">Estirar</string>
+    <string name="lbl_auto_crop">Auto-ajuste</string>
+    <string name="advanced_settings">Configuración (Avanzado)</string>
+    <string name="always_authenticate_description">Habilitar ésta función deshabilita el inicio de sesión automático</string>
+    <string name="always_authenticate">Siempre pedir credenciales</string>
+    <string name="alphabetical">Alfabético</string>
+    <string name="last_use">Más reciente usado</string>
+    <string name="lbl_community_rating">Calificación de la comunidad</string>
 </resources>

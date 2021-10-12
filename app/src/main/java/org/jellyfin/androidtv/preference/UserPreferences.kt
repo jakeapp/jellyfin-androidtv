@@ -4,7 +4,14 @@ import android.content.Context
 import android.view.KeyEvent
 import androidx.preference.PreferenceManager
 import org.acra.ACRA
-import org.jellyfin.androidtv.preference.constant.*
+import org.jellyfin.androidtv.preference.constant.AppTheme
+import org.jellyfin.androidtv.preference.constant.AudioBehavior
+import org.jellyfin.androidtv.preference.constant.ClockBehavior
+import org.jellyfin.androidtv.preference.constant.NextUpBehavior
+import org.jellyfin.androidtv.preference.constant.PreferredVideoPlayer
+import org.jellyfin.androidtv.preference.constant.RatingType
+import org.jellyfin.androidtv.preference.constant.WatchedIndicatorBehavior
+import org.jellyfin.androidtv.preference.constant.defaultAudioBehavior
 import org.jellyfin.androidtv.util.DeviceUtils
 
 /**
@@ -42,11 +49,6 @@ class UserPreferences(context: Context) : SharedPreferenceStore(
 		 * Show a little notification to celebrate a set of holidays
 		 */
 		var seasonalGreetingsEnabled = Preference.boolean("pref_enable_themes", true)
-
-		/**
-		 * Show additional debug information
-		 */
-		var debuggingEnabled = Preference.boolean("pref_enable_debug", false)
 
 		/* Playback - General*/
 		/**
@@ -101,7 +103,7 @@ class UserPreferences(context: Context) : SharedPreferenceStore(
 		/**
 		 * Preferred behavior for audio streaming.
 		 */
-		var audioBehaviour = Preference.enum("audio_behavior", AudioBehavior.DIRECT_STREAM)
+		var audioBehaviour = Preference.enum("audio_behavior", defaultAudioBehavior)
 
 		/**
 		 * Enable DTS
@@ -138,6 +140,17 @@ class UserPreferences(context: Context) : SharedPreferenceStore(
 		 * Shortcut used for changing the subtitle track
 		 */
 		var shortcutSubtitleTrack = Preference.int("shortcut_subtitle_track", KeyEvent.KEYCODE_CAPTIONS)
+
+		/* Developer options */
+		/**
+		 * Show additional debug information
+		 */
+		var debuggingEnabled = Preference.boolean("pref_enable_debug", false)
+
+		/**
+		 * Use playback rewrite module
+		 */
+		var playbackRewriteEnabled = Preference.boolean("playback_new", false)
 
 		/* ACRA */
 		/**

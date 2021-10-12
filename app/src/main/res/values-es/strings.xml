@@ -55,7 +55,7 @@
     <string name="lbl_people">Gente</string>
     <string name="lbl_none">Ninguno</string>
     <string name="msg_video_playback_error">"Error de reproducción de video - "</string>
-    <string name="lbl_bracket_unknown"><![CDATA[<Unknown>]]></string>
+    <string name="lbl_bracket_unknown">&lt;Desconocido&gt;</string>
     <string name="msg_access_restricted">Acceso Restingido en este momento</string>
     <string name="lbl_trailer">"Avance "</string>
     <string name="lbl_no">No</string>
@@ -67,7 +67,7 @@
     <string name="lbl_ok">Ok</string>
     <string name="lbl_born">"Nació "</string>
     <string name="lbl_loading_elipses">Cargando...</string>
-    <string name="msg_playback_not_allowed">En este momento la reproducción no permitida</string>
+    <string name="msg_playback_not_allowed">En este momento la reproducción no está permitida</string>
     <string name="msg_playback_restricted">En este momento el administrador ha restringido la reproducción de este elemento</string>
     <string name="msg_playback_incompatible">No es posible reproducir este formato de video</string>
     <string name="lbl_never">Nunca</string>
@@ -105,12 +105,12 @@
     <string name="lbl_unwatched">No visto</string>
     <string name="msg_no_playable_items">No hay elementos reproducibles</string>
     <string name="lbl_remove_dislike">Eliminar No me Gusta</string>
-    <string name="lbl_unlike">Diferente a</string>
+    <string name="lbl_unlike">Quitar me gusta</string>
     <string name="lbl_dislike">No me gusta</string>
     <string name="lbl_like">Me gusta</string>
     <string name="lbl_now_playing_album">desde %1$s</string>
     <string name="lbl_add_favorite">Agregar Favorito</string>
-    <string name="lbl_remove_favorite">Eliminar Favorito</string>
+    <string name="lbl_remove_favorite">Quitar favorito</string>
     <string name="lbl_mark_played">Marcar como visto</string>
     <string name="lbl_mark_unplayed">Marcar No Reproducido</string>
     <string name="lbl_play_first_unwatched">Reproducir Primero Lo No Visto</string>
@@ -124,7 +124,7 @@
     <string name="lbl_favorite">Favoritos</string>
     <string name="lbl_series">Series</string>
     <string name="lbl_item">Artículo</string>
-    <string name="lbl_items">Artículos</string>
+    <string name="lbl_items">Elementos</string>
     <string name="lbl_record_series">Grabar series</string>
     <string name="lbl_cancel_series">Cancelar series</string>
     <string name="lbl_cancel_recording">Cancelar grabación</string>
@@ -198,10 +198,7 @@
     <string name="lbl_current_queue">Cola actual</string>
     <string name="btn_got_it">Entendido</string>
     <string name="msg_external_path">Esta característica solo funcionará si ha configurado correctamente su biblioteca en el servidor con rutas de red o sustitución de rutas y el cliente que está utilizando puede acceder directamente a estas ubicaciones a través de la red.</string>
-    <string name="lbl_vertical_stretch">Estiramiento vertical</string>
-    <string name="lbl_horizontal_stretch">Estiramiento horizontal</string>
     <string name="lbl_zoom">Agrandar</string>
-    <string name="lbl_normal">Normal</string>
     <string name="desc_bitstream_ac3">Requiere hardware compatible</string>
     <string name="lbl_new_premieres">Estrenos nuevos</string>
     <string name="desc_automatic_fav_songs">Lista de reproducción automática de canciones favoritas y canciones que le gustaron</string>
@@ -345,9 +342,7 @@
     <string name="lbl_pause">Pausar</string>
     <string name="watch_count_overflow">99+</string>
     <string name="lbl_playback_control_ends">Termina a las %1$s</string>
-    <string name="lbl_manual_login">Iniciar Sesión Manualmente</string>
     <string name="lbl_sign_in">Por Favor, Inicie Sesión</string>
-    <string name="lbl_add_server">Añadir Servidor</string>
     <string name="pref_clock_display_browsing">Durante la navegación</string>
     <string name="pref_clock_display_playback">Durante la reproducción</string>
     <string name="lbl_always">Siempre</string>
@@ -366,11 +361,9 @@
     <string name="lbl_episode_marks">Solo en episodios</string>
     <string name="lbl_hide_unwatched_count">Ocultar contador de \"no visto\"</string>
     <string name="pref_watched_indicator">Mostrar indicadores de \"ya visto\"</string>
-    <string name="connect_title">Conectar</string>
     <string name="login_help_description">Jellyfin necesita un servidor al cual conectarse. Visita nuestra documentación en docs.jellyfin.org o escanea el código QR para comenzar a usar Jellyfin.</string>
     <string name="login_help_title">¿Necesitas ayuda\?</string>
     <string name="connect_manually_by_address">Introduce la dirección del servidor</string>
-    <string name="connect_manually_title">Conectar manualmente</string>
     <string name="discovered_servers_empty">No se ha encontrado ningún servidor en la red local.</string>
     <string name="discovered_servers_title">Servidores descubiertos</string>
     <string name="lbl_hidden">Oculto</string>
@@ -439,4 +432,15 @@
     <string name="lbl_starting_on_schedule_ending_after">Comenzar en programación y finalizar %1$s después del horario</string>
     <string name="lbl_starting_early_ending_on_schedule">Comenzar %1$s antes y finalizar en el horario</string>
     <string name="lbl_starting_early_ending_after">Comenzar %1$s antes y finalizar %2$s después del horario</string>
+    <string name="enable_playback_module_description">Esta es una característica experimental. No tiene soporte.</string>
+    <string name="enable_playback_module_title">Habilitar nuevo reproductor</string>
+    <string name="lbl_fit">Normal</string>
+    <string name="lbl_stretch">Estirar</string>
+    <string name="lbl_auto_crop">Ajuste automático</string>
+    <string name="advanced_settings">Preferencias (Avanzado)</string>
+    <string name="always_authenticate_description">Habilitar ésto deshabilitará el inicio de sesión automático</string>
+    <string name="always_authenticate">Siempre pedir credenciales</string>
+    <string name="alphabetical">Alfabético</string>
+    <string name="last_use">Más reciente usado</string>
+    <string name="lbl_community_rating">Calificación de la comunidad</string>
 </resources>

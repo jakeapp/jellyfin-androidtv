@@ -14,6 +14,7 @@ import org.jellyfin.androidtv.ui.itemhandling.BaseRowItem;
 import org.jellyfin.androidtv.ui.itemhandling.ItemLauncher;
 import org.jellyfin.androidtv.ui.playback.MediaManager;
 import org.jellyfin.androidtv.ui.playback.PlaybackController;
+import org.jellyfin.androidtv.ui.playback.PlaybackLauncher;
 import org.jellyfin.androidtv.ui.playback.PlaybackOverlayActivity;
 import org.jellyfin.androidtv.util.Utils;
 import org.jellyfin.androidtv.util.apiclient.PlaybackHelper;
@@ -29,12 +30,11 @@ import org.jellyfin.apiclient.model.session.MessageCommand;
 import org.jellyfin.apiclient.model.session.PlayRequest;
 import org.jellyfin.apiclient.model.session.PlaystateRequest;
 import org.jellyfin.apiclient.model.session.SessionInfoDto;
+import org.koin.java.KoinJavaComponent;
 
 import java.util.Arrays;
 
 import timber.log.Timber;
-
-import static org.koin.java.KoinJavaComponent.get;
 
 public class TvApiEventListener extends ApiEventListener {
     private final DataRefreshService dataRefreshService;
@@ -172,15 +172,19 @@ public class TvApiEventListener extends ApiEventListener {
                     ItemFields.ChildCount
             });
             query.setIds(command.getItemIds());
-            get(ApiClient.class).GetItemsAsync(query, new Response<ItemsResult>() {
+            KoinJavaComponent.<ApiClient>get(ApiClient.class).GetItemsAsync(query, new Response<ItemsResult>() {
                 @Override
                 public void onResponse(ItemsResult response) {
                     if (response.getItems() != null && response.getItems().length > 0) {
+                        PlaybackLauncher playbackLauncher = KoinJavaComponent.<PlaybackLauncher>get(PlaybackLauncher.class);
+                        if (playbackLauncher.interceptPlayRequest(TvApp.getApplication(), response.getItems()[0])) return;
+
                         //peek at first item to see what type it is
                         switch (response.getItems()[0].getMediaType()) {
                             case "Video":
+                                Class activity = KoinJavaComponent.<PlaybackLauncher>get(PlaybackLauncher.class).getPlaybackActivityClass(response.getItems()[0].getBaseItemType());
                                 mediaManager.setCurrentVideoQueue(Arrays.asList(response.getItems()));
-                                Intent intent = new Intent(TvApp.getApplication().getCurrentActivity(), TvApp.getApplication().getPlaybackActivityClass(response.getItems()[0].getBaseItemType()));
+                                Intent intent = new Intent(TvApp.getApplication().getCurrentActivity(), activity);
                                 TvApp.getApplication().getCurrentActivity().startActivity(intent);
                                 break;
                             case "Audio":

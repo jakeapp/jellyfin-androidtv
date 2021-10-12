@@ -12,8 +12,12 @@ import org.jellyfin.androidtv.util.profile.ProfileHelper.photoDirectPlayProfile
 import org.jellyfin.androidtv.util.profile.ProfileHelper.subtitleProfile
 import org.jellyfin.apiclient.model.dlna.CodecProfile
 import org.jellyfin.apiclient.model.dlna.CodecType
+import org.jellyfin.apiclient.model.dlna.ContainerProfile
 import org.jellyfin.apiclient.model.dlna.DirectPlayProfile
 import org.jellyfin.apiclient.model.dlna.DlnaProfileType
+import org.jellyfin.apiclient.model.dlna.ProfileCondition
+import org.jellyfin.apiclient.model.dlna.ProfileConditionType
+import org.jellyfin.apiclient.model.dlna.ProfileConditionValue
 import org.jellyfin.apiclient.model.dlna.SubtitleDeliveryMethod
 
 class LibVlcProfile(
@@ -41,6 +45,7 @@ class LibVlcProfile(
 					ContainerTypes.OGM,
 					ContainerTypes.OGV,
 					ContainerTypes.M2V,
+					ContainerTypes.AVI,
 					ContainerTypes.MPG,
 					ContainerTypes.MPEG,
 					ContainerTypes.MP4,
@@ -100,6 +105,20 @@ class LibVlcProfile(
 			maxAudioChannelsCodecProfile(channels = 8)
 		)
 
+		containerProfiles = arrayOf(
+			ContainerProfile().apply {
+				type = DlnaProfileType.Video
+				container = ContainerTypes.AVI
+				conditions = arrayOf(
+					ProfileCondition(
+						ProfileConditionType.NotEquals,
+						ProfileConditionValue.VideoCodecTag,
+						ContainerTypes.XVID
+					)
+				)
+			}
+		)
+
 		subtitleProfiles = arrayOf(
 			subtitleProfile("srt", SubtitleDeliveryMethod.External),
 			subtitleProfile("srt", SubtitleDeliveryMethod.Embed),
@@ -107,7 +126,7 @@ class LibVlcProfile(
 			subtitleProfile("ass", SubtitleDeliveryMethod.Embed),
 			subtitleProfile("ssa", SubtitleDeliveryMethod.Embed),
 			subtitleProfile("pgs", SubtitleDeliveryMethod.Embed),
-			subtitleProfile("pbssub", SubtitleDeliveryMethod.Embed),
+			subtitleProfile("pgssub", SubtitleDeliveryMethod.Embed),
 			subtitleProfile("dvdsub", SubtitleDeliveryMethod.Embed),
 			subtitleProfile("vtt", SubtitleDeliveryMethod.Embed),
 			subtitleProfile("sub", SubtitleDeliveryMethod.Embed),

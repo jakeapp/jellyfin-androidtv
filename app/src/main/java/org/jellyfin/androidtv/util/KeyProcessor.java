@@ -9,6 +9,7 @@ import android.widget.PopupMenu;
 
 import org.jellyfin.androidtv.R;
 import org.jellyfin.androidtv.TvApp;
+import org.jellyfin.androidtv.auth.SessionRepository;
 import org.jellyfin.androidtv.constant.CustomMessage;
 import org.jellyfin.androidtv.data.model.DataRefreshService;
 import org.jellyfin.androidtv.data.querying.StdItemQuery;
@@ -18,6 +19,7 @@ import org.jellyfin.androidtv.ui.itemhandling.AudioQueueItem;
 import org.jellyfin.androidtv.ui.itemhandling.BaseRowItem;
 import org.jellyfin.androidtv.ui.playback.AudioNowPlayingActivity;
 import org.jellyfin.androidtv.ui.playback.MediaManager;
+import org.jellyfin.androidtv.ui.playback.PlaybackLauncher;
 import org.jellyfin.androidtv.ui.shared.BaseActivity;
 import org.jellyfin.androidtv.util.apiclient.BaseItemUtils;
 import org.jellyfin.androidtv.util.apiclient.PlaybackHelper;
@@ -29,12 +31,12 @@ import org.jellyfin.apiclient.model.dto.UserItemDataDto;
 import org.jellyfin.apiclient.model.entities.SortOrder;
 import org.jellyfin.apiclient.model.querying.ItemFilter;
 import org.jellyfin.apiclient.model.querying.ItemsResult;
+import org.koin.java.KoinJavaComponent;
 
 import java.util.List;
+import java.util.UUID;
 
 import timber.log.Timber;
-
-import static org.koin.java.KoinJavaComponent.get;
 
 public class KeyProcessor {
 
@@ -68,8 +70,8 @@ public class KeyProcessor {
         switch (key) {
             case KeyEvent.KEYCODE_MEDIA_PLAY:
             case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                if (get(MediaManager.class).isPlayingAudio() && (!rowItem.isBaseItem() || rowItem.getBaseItemType() != BaseItemType.Photo)) {
-                    get(MediaManager.class).pauseAudio();
+                if (KoinJavaComponent.<MediaManager>get(MediaManager.class).isPlayingAudio() && (!rowItem.isBaseItem() || rowItem.getBaseItemType() != BaseItemType.Photo)) {
+                    KoinJavaComponent.<MediaManager>get(MediaManager.class).pauseAudio();
                     return true;
                 }
 
@@ -152,15 +154,16 @@ public class KeyProcessor {
                     case GridButton:
                         if (rowItem.getGridButton().getId() == TvApp.VIDEO_QUEUE_OPTION_ID) {
                             //Queue already there - just kick off playback
-                            BaseItemType itemType = get(MediaManager.class).getCurrentVideoQueue().size() > 0 ? get(MediaManager.class).getCurrentVideoQueue().get(0).getBaseItemType() : null;
-                            Intent intent = new Intent(activity, TvApp.getApplication().getPlaybackActivityClass(itemType));
+                            BaseItemType itemType = KoinJavaComponent.<MediaManager>get(MediaManager.class).getCurrentVideoQueue().size() > 0 ? KoinJavaComponent.<MediaManager>get(MediaManager.class).getCurrentVideoQueue().get(0).getBaseItemType() : null;
+                            Class newActivity = KoinJavaComponent.<PlaybackLauncher>get(PlaybackLauncher.class).getPlaybackActivityClass(itemType);
+                            Intent intent = new Intent(activity, newActivity);
                             activity.startActivity(intent);
                         }
                         break;
                 }
 
-                if (get(MediaManager.class).hasAudioQueueItems()) {
-                    get(MediaManager.class).resumeAudio();
+                if (KoinJavaComponent.<MediaManager>get(MediaManager.class).hasAudioQueueItems()) {
+                    KoinJavaComponent.<MediaManager>get(MediaManager.class).resumeAudio();
                     return true;
                 }
 
@@ -227,11 +230,11 @@ public class KeyProcessor {
             if (!(activity instanceof AudioNowPlayingActivity)) {
                 menu.getMenu().add(0, MENU_GOTO_NOW_PLAYING, order++, R.string.lbl_goto_now_playing);
             }
-            if (rowItem.getBaseItem() != get(MediaManager.class).getCurrentAudioItem()) {
+            if (rowItem.getBaseItem() != KoinJavaComponent.<MediaManager>get(MediaManager.class).getCurrentAudioItem()) {
                 menu.getMenu().add(0, MENU_ADVANCE_QUEUE, order++, R.string.lbl_play_from_here);
             }
             // don't allow removal of last item - framework will crash trying to animate an empty row
-            if (get(MediaManager.class).getCurrentAudioQueue().size() > 1) {
+            if (KoinJavaComponent.<MediaManager>get(MediaManager.class).getCurrentAudioQueue().size() > 1) {
                 menu.getMenu().add(0, MENU_REMOVE_FROM_QUEUE, order++, R.string.lbl_remove_from_queue);
             }
         } else {
@@ -351,7 +354,7 @@ public class KeyProcessor {
                         PlaybackHelper.getItemsToPlay(mCurrentItem, false, false, new Response<List<BaseItemDto>>() {
                             @Override
                             public void onResponse(List<BaseItemDto> response) {
-                                get(MediaManager.class).addToAudioQueue(response);
+                                KoinJavaComponent.<MediaManager>get(MediaManager.class).addToAudioQueue(response);
                             }
 
                             @Override
@@ -361,10 +364,10 @@ public class KeyProcessor {
                         });
 
                     } else {
-                        get(ApiClient.class).GetItemAsync(mCurrentItemId, TvApp.getApplication().getCurrentUser().getId(), new Response<BaseItemDto>() {
+                        KoinJavaComponent.<ApiClient>get(ApiClient.class).GetItemAsync(mCurrentItemId, TvApp.getApplication().getCurrentUser().getId(), new Response<BaseItemDto>() {
                             @Override
                             public void onResponse(BaseItemDto response) {
-                                get(MediaManager.class).addToVideoQueue(response);
+                                KoinJavaComponent.<MediaManager>get(MediaManager.class).addToVideoQueue(response);
                             }
 
                             @Override
@@ -385,7 +388,7 @@ public class KeyProcessor {
                     query.setLimit(1);
                     query.setExcludeItemTypes(new String[] {"Series","Season","Folder","MusicAlbum","Playlist","BoxSet"});
                     query.setFilters(new ItemFilter[] {ItemFilter.IsUnplayed});
-                    get(ApiClient.class).GetItemsAsync(query, new Response<ItemsResult>() {
+                    KoinJavaComponent.<ApiClient>get(ApiClient.class).GetItemsAsync(query, new Response<ItemsResult>() {
                         @Override
                         public void onResponse(ItemsResult response) {
                             if (response.getTotalRecordCount() == 0) {
@@ -429,13 +432,13 @@ public class KeyProcessor {
                     mCurrentActivity.startActivity(nowPlaying);
                     return true;
                 case MENU_REMOVE_FROM_QUEUE:
-                    get(MediaManager.class).removeFromAudioQueue(mCurrentRowItemNdx);
+                    KoinJavaComponent.<MediaManager>get(MediaManager.class).removeFromAudioQueue(mCurrentRowItemNdx);
                     return true;
                 case MENU_ADVANCE_QUEUE:
-                    get(MediaManager.class).playFrom(mCurrentRowItemNdx);
+                    KoinJavaComponent.<MediaManager>get(MediaManager.class).playFrom(mCurrentRowItemNdx);
                     return true;
                 case MENU_INSTANT_MIX:
-                    PlaybackHelper.playInstantMix(mCurrentItemId);
+                    PlaybackHelper.playInstantMix(mCurrentActivity, mCurrentItem);
                     return true;
             }
 
@@ -444,7 +447,7 @@ public class KeyProcessor {
     };
 
     private static void markPlayed() {
-        get(ApiClient.class).MarkPlayedAsync(mCurrentItemId, TvApp.getApplication().getCurrentUser().getId(), null, new Response<UserItemDataDto>() {
+        KoinJavaComponent.<ApiClient>get(ApiClient.class).MarkPlayedAsync(mCurrentItemId, TvApp.getApplication().getCurrentUser().getId(), null, new Response<UserItemDataDto>() {
             @Override
             public void onResponse(UserItemDataDto response) {
                 if (mCurrentActivity instanceof BaseActivity)
@@ -461,7 +464,7 @@ public class KeyProcessor {
     }
 
     private static void markUnplayed() {
-        get(ApiClient.class).MarkUnplayedAsync(mCurrentItemId, TvApp.getApplication().getCurrentUser().getId(), new Response<UserItemDataDto>() {
+        KoinJavaComponent.<ApiClient>get(ApiClient.class).MarkUnplayedAsync(mCurrentItemId, TvApp.getApplication().getCurrentUser().getId(), new Response<UserItemDataDto>() {
             @Override
             public void onResponse(UserItemDataDto response) {
                 if (mCurrentActivity instanceof BaseActivity)
@@ -478,12 +481,12 @@ public class KeyProcessor {
     }
 
     private static void toggleFavorite(boolean fav) {
-        get(ApiClient.class).UpdateFavoriteStatusAsync(mCurrentItemId, TvApp.getApplication().getCurrentUser().getId(), fav, new Response<UserItemDataDto>() {
+        KoinJavaComponent.<ApiClient>get(ApiClient.class).UpdateFavoriteStatusAsync(mCurrentItemId, TvApp.getApplication().getCurrentUser().getId(), fav, new Response<UserItemDataDto>() {
             @Override
             public void onResponse(UserItemDataDto response) {
                 if (mCurrentActivity instanceof BaseActivity)
                     ((BaseActivity)mCurrentActivity).sendMessage(CustomMessage.RefreshCurrentItem);
-                DataRefreshService dataRefreshService = get(DataRefreshService.class);
+                DataRefreshService dataRefreshService = KoinJavaComponent.<DataRefreshService>get(DataRefreshService.class);
                 dataRefreshService.setLastFavoriteUpdate(System.currentTimeMillis());
             }
 
@@ -497,8 +500,9 @@ public class KeyProcessor {
     }
 
     private static void toggleLikes(Boolean likes) {
+        UUID userId = KoinJavaComponent.<SessionRepository>get(SessionRepository.class).getCurrentSession().getValue().getUserId();
         if (likes == null) {
-            get(ApiClient.class).ClearUserItemRatingAsync(mCurrentItemId, TvApp.getApplication().getCurrentUser().getId(), new Response<UserItemDataDto>() {
+            KoinJavaComponent.<ApiClient>get(ApiClient.class).ClearUserItemRatingAsync(mCurrentItemId, userId.toString(), new Response<UserItemDataDto>() {
                 @Override
                 public void onResponse(UserItemDataDto response) {
                     if (mCurrentActivity instanceof BaseActivity)
@@ -513,7 +517,7 @@ public class KeyProcessor {
             });
 
         } else {
-            get(ApiClient.class).UpdateUserItemRatingAsync(mCurrentItemId, TvApp.getApplication().getCurrentUser().getId(), likes, new Response<UserItemDataDto>() {
+            KoinJavaComponent.<ApiClient>get(ApiClient.class).UpdateUserItemRatingAsync(mCurrentItemId, userId.toString(), likes, new Response<UserItemDataDto>() {
                 @Override
                 public void onResponse(UserItemDataDto response) {
                     if (mCurrentActivity instanceof BaseActivity)

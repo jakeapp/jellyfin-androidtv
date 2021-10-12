@@ -190,9 +190,7 @@
     <string name="lbl_items">Elementi</string>
     <string name="watch_count_overflow">99+</string>
     <string name="lbl_playback_control_ends">Konec ob %1$s</string>
-    <string name="lbl_manual_login">Ročni vpis</string>
     <string name="lbl_sign_in">Prosim vpišite se</string>
-    <string name="lbl_add_server">Dodaj strežnik</string>
     <string name="play_with">Predvajaj z</string>
     <string name="play_with_external_app">Predvajaj z zunanjo aplikacijo</string>
     <string name="play_with_exo_player">Predvajaj z ExoPlayer</string>
@@ -295,10 +293,7 @@
     <string name="btn_got_it">Razumem</string>
     <string name="lbl_subtitle_track">Izberi sled podnapisov</string>
     <string name="lbl_audio_track">Izberite zvočni posnetek</string>
-    <string name="lbl_vertical_stretch">Vertikalni razteg</string>
-    <string name="lbl_horizontal_stretch">Horizontalni razteg</string>
     <string name="lbl_zoom">Povečava</string>
-    <string name="lbl_normal">Normalno</string>
     <string name="desc_bitstream_ac3">Zahteva zmogljivo strojno opremo</string>
     <string name="lbl_bitstream_ac3">Bitstream Dolby Digital audio</string>
     <string name="lbl_new_premieres">Nove premiere</string>

@@ -1,5 +1,7 @@
 package org.jellyfin.androidtv.ui.itemdetail;
 
+import static org.koin.java.KoinJavaComponent.inject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -53,6 +55,7 @@ import org.jellyfin.androidtv.ui.itemhandling.ItemRowAdapter;
 import org.jellyfin.androidtv.ui.livetv.TvManager;
 import org.jellyfin.androidtv.ui.playback.ExternalPlayerActivity;
 import org.jellyfin.androidtv.ui.playback.MediaManager;
+import org.jellyfin.androidtv.ui.playback.PlaybackLauncher;
 import org.jellyfin.androidtv.ui.presentation.CardPresenter;
 import org.jellyfin.androidtv.ui.presentation.CustomListRowPresenter;
 import org.jellyfin.androidtv.ui.presentation.InfoCardPresenter;
@@ -90,6 +93,7 @@ import org.jellyfin.apiclient.model.querying.SeasonQuery;
 import org.jellyfin.apiclient.model.querying.SimilarItemsQuery;
 import org.jellyfin.apiclient.model.querying.UpcomingEpisodesQuery;
 import org.jellyfin.apiclient.serialization.GsonJsonSerializer;
+import org.koin.java.KoinJavaComponent;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -103,9 +107,6 @@ import java.util.concurrent.ExecutionException;
 
 import kotlin.Lazy;
 import timber.log.Timber;
-
-import static org.koin.java.KoinJavaComponent.get;
-import static org.koin.java.KoinJavaComponent.inject;
 
 public class FullDetailsActivity extends BaseActivity implements IRecordingIndicatorView {
 
@@ -214,7 +215,7 @@ public class FullDetailsActivity extends BaseActivity implements IRecordingIndic
 
     private int getResumePreroll() {
         try {
-            return Integer.parseInt(get(UserPreferences.class).get(UserPreferences.Companion.getResumeSubtractDuration())) * 1000;
+            return Integer.parseInt(KoinJavaComponent.<UserPreferences>get(UserPreferences.class).get(UserPreferences.Companion.getResumeSubtractDuration())) * 1000;
         } catch (Exception e) {
             Timber.e(e, "Unable to parse resume preroll");
             return 0;
@@ -766,7 +767,7 @@ public class FullDetailsActivity extends BaseActivity implements IRecordingIndic
     }
 
     private void addInfoRows(ArrayObjectAdapter adapter) {
-        if (get(UserPreferences.class).get(UserPreferences.Companion.getDebuggingEnabled()) && mBaseItem.getMediaSources() != null) {
+        if (KoinJavaComponent.<UserPreferences>get(UserPreferences.class).get(UserPreferences.Companion.getDebuggingEnabled()) && mBaseItem.getMediaSources() != null) {
             for (MediaSourceInfo ms : mBaseItem.getMediaSources()) {
                 if (ms.getMediaStreams() != null && ms.getMediaStreams().size() > 0) {
                     HeaderItem header = new HeaderItem("Media Details"+(ms.getContainer() != null ? " (" +ms.getContainer()+")" : ""));
@@ -992,7 +993,7 @@ public class FullDetailsActivity extends BaseActivity implements IRecordingIndic
                     TextUnderButton imix = new TextUnderButton(this, R.drawable.ic_mix, buttonSize, getString(R.string.lbl_instant_mix), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            PlaybackHelper.playInstantMix(mBaseItem.getId());
+                            PlaybackHelper.playInstantMix(FullDetailsActivity.this, mBaseItem);
                         }
                     });
                     mDetailsOverviewRow.addAction(imix);
@@ -1563,10 +1564,14 @@ public class FullDetailsActivity extends BaseActivity implements IRecordingIndic
         PlaybackHelper.getItemsToPlay(item, pos == 0 && item.getBaseItemType() == BaseItemType.Movie, shuffle, new Response<List<BaseItemDto>>() {
             @Override
             public void onResponse(List<BaseItemDto> response) {
+                PlaybackLauncher playbackLauncher = KoinJavaComponent.<PlaybackLauncher>get(PlaybackLauncher.class);
+                if (playbackLauncher.interceptPlayRequest(FullDetailsActivity.this, item)) return;
+
                 if (item.getBaseItemType() == BaseItemType.MusicArtist) {
                     mediaManager.getValue().playNow(response);
                 } else {
-                    Intent intent = new Intent(FullDetailsActivity.this, TvApp.getApplication().getPlaybackActivityClass(item.getBaseItemType()));
+                    Class activity = KoinJavaComponent.<PlaybackLauncher>get(PlaybackLauncher.class).getPlaybackActivityClass(item.getBaseItemType());
+                    Intent intent = new Intent(FullDetailsActivity.this, activity);
                     mediaManager.getValue().setCurrentVideoQueue(response);
                     intent.putExtra("Position", pos);
                     startActivity(intent);
@@ -1578,7 +1583,8 @@ public class FullDetailsActivity extends BaseActivity implements IRecordingIndic
 
     protected void play(final BaseItemDto[] items, final int pos, final boolean shuffle) {
         List<BaseItemDto> itemsToPlay = Arrays.asList(items);
-        Intent intent = new Intent(this, TvApp.getApplication().getPlaybackActivityClass(items[0].getBaseItemType()));
+        Class activity = KoinJavaComponent.<PlaybackLauncher>get(PlaybackLauncher.class).getPlaybackActivityClass(items[0].getBaseItemType());
+        Intent intent = new Intent(this, activity);
         if (shuffle) Collections.shuffle(itemsToPlay);
         mediaManager.getValue().setCurrentVideoQueue(itemsToPlay);
         intent.putExtra("Position", pos);

@@ -83,9 +83,7 @@
     <string name="lbl_stars">Звездице</string>
     <string name="watch_count_overflow">99+</string>
     <string name="lbl_playback_control_ends">Завршава се у %1$s</string>
-    <string name="lbl_manual_login">Ручна пријава</string>
     <string name="lbl_sign_in">Молимо пријавите се</string>
-    <string name="lbl_add_server">Додај сервер</string>
     <string name="play_with">Репродукуј са</string>
     <string name="play_with_external_app">Репродукуј са екстерном апликацијом</string>
     <string name="play_with_exo_player">Репродукуј са ExoPlayer</string>
@@ -232,10 +230,7 @@
     <string name="msg_external_path">Ова функција ће функционисати само ако сте правилно поставили библиотеку на серверу са мрежним путањама или заменом путање, а клијент који користите може директно приступити тим локацијама преко мреже.</string>
     <string name="lbl_subtitle_track">Изаберите запис титла</string>
     <string name="lbl_audio_track">Изаберите аудио запис</string>
-    <string name="lbl_vertical_stretch">Вертикално развлачење</string>
-    <string name="lbl_horizontal_stretch">Хоризонтално развлачење</string>
     <string name="lbl_zoom">Зум</string>
-    <string name="lbl_normal">Нормално</string>
     <string name="desc_bitstream_ac3">Захтева способан хардвер</string>
     <string name="lbl_bitstream_ac3">Bitstream Dolby Digital звук</string>
     <string name="lbl_new_premieres">Нове премијере</string>
@@ -375,11 +370,9 @@
     <string name="lbl_episode_marks">Само на епизодама</string>
     <string name="lbl_hide_unwatched_count">Сакриј бројчаник за неодгледано</string>
     <string name="pref_watched_indicator">Прикажи индикаторе за одгледано</string>
-    <string name="connect_title">Повежи се</string>
     <string name="login_help_description">Jellyfin захтева сервер за повезивање. Посетите нашу документацију на docs.jellyfin.org да бисте започели са Jellyfin-ом.</string>
     <string name="login_help_title">Потребна Вам је помоћ\?</string>
     <string name="connect_manually_by_address">Унесите адресу сервера</string>
-    <string name="connect_manually_title">Повежите се ручно</string>
     <string name="discovered_servers_empty">Није пронађен ниједан сервер на локалној мрежи.</string>
     <string name="discovered_servers_title">Откривени сервери</string>
     <string name="lbl_hidden">Сакривено</string>

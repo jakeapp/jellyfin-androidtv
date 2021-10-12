@@ -11,8 +11,7 @@ import org.jellyfin.apiclient.model.dto.BaseItemDto;
 import org.jellyfin.apiclient.model.querying.ItemSortBy;
 import org.jellyfin.apiclient.model.querying.ItemsByNameQuery;
 import org.jellyfin.apiclient.model.querying.ItemsResult;
-
-import static org.koin.java.KoinJavaComponent.get;
+import org.koin.java.KoinJavaComponent;
 
 public class ByGenreFragment extends CustomViewFragment {
     @Override
@@ -25,17 +24,17 @@ public class ByGenreFragment extends CustomViewFragment {
         if (Utils.getSafeValue(mFolder.getChildCount(), 0) > 0) {
             //Get all genres for this folder
             ItemsByNameQuery genres = new ItemsByNameQuery();
-            genres.setParentId(mFolder.getId());
+            genres.setParentId(mFolder.getId().toString());
             genres.setSortBy(new String[]{ItemSortBy.SortName});
             if (includeType != null) genres.setIncludeItemTypes(new String[]{includeType});
             genres.setRecursive(true);
             genres.setUserId(TvApp.getApplication().getCurrentUser().getId());
-            get(ApiClient.class).GetGenresAsync(genres, new Response<ItemsResult>() {
+            KoinJavaComponent.<ApiClient>get(ApiClient.class).GetGenresAsync(genres, new Response<ItemsResult>() {
                 @Override
                 public void onResponse(ItemsResult response) {
                     for (BaseItemDto genre : response.getItems()) {
                         StdItemQuery genreQuery = new StdItemQuery();
-                        genreQuery.setParentId(mFolder.getId());
+                        genreQuery.setParentId(mFolder.getId().toString());
                         genreQuery.setSortBy(new String[]{ItemSortBy.SortName});
                         if (includeType != null)
                             genreQuery.setIncludeItemTypes(new String[]{includeType});

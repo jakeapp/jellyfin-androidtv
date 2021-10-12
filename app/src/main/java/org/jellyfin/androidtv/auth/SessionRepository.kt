@@ -45,11 +45,13 @@ class SessionRepositoryImpl(
 	override fun restoreDefaultSession() {
 		Timber.d("Restoring default session")
 
+		if (authenticationPreferences[AuthenticationPreferences.alwaysAuthenticate]) return destroyCurrentSession()
+
 		val behavior = authenticationPreferences[AuthenticationPreferences.autoLoginUserBehavior]
 		val userId = authenticationPreferences[AuthenticationPreferences.autoLoginUserId].toUUIDOrNull()
 
 		when (behavior) {
-			DISABLED -> setCurrentSession(null, false)
+			DISABLED -> destroyCurrentSession()
 			LAST_USER -> setCurrentSession(createLastUserSession(), false)
 			SPECIFIC_USER -> setCurrentSession(createUserSession(userId), false)
 		}
@@ -57,6 +59,8 @@ class SessionRepositoryImpl(
 
 	override fun restoreDefaultSystemSession() {
 		Timber.d("Restoring default system session")
+
+		if (authenticationPreferences[AuthenticationPreferences.alwaysAuthenticate]) return setCurrentSession(null, false)
 
 		val behavior = authenticationPreferences[AuthenticationPreferences.systemUserBehavior]
 		val userId = authenticationPreferences[AuthenticationPreferences.systemUserId].toUUIDOrNull()
@@ -69,15 +73,18 @@ class SessionRepositoryImpl(
 	}
 
 	override suspend fun switchCurrentSession(userId: UUID): Boolean {
-		Timber.d("Switching current session to user ${userId}")
+		// No change in user - don't switch
+		if (currentSession.value?.userId == userId) return false
+
+		Timber.d("Switching current session to user $userId")
 
 		val session = createUserSession(userId)
 		if (session == null) {
-			Timber.d("Could not switch to non-existing session for user ${userId}")
+			Timber.d("Could not switch to non-existing session for user $userId")
 			return false
 		}
 
-		return suspendCoroutine<Boolean> { continuation ->
+		return suspendCoroutine { continuation ->
 			setCurrentSession(session, true) { success ->
 				continuation.resume(success)
 			}
@@ -87,10 +94,15 @@ class SessionRepositoryImpl(
 	override fun destroyCurrentSession() {
 		Timber.d("Destroying current session")
 
-		setCurrentSession(null, false)
+		_currentSession.value = null
+		userApiClient.applySession(null)
+		apiBinder.updateSession(null) { }
 	}
 
 	private fun setCurrentSession(session: Session?, includeSystemUser: Boolean, callback: ((Boolean) -> Unit)? = null) {
+		// No change in session - don't switch
+		if (session != null && currentSession.value?.userId == session.userId) return
+
 		if (session != null) authenticationPreferences[AuthenticationPreferences.lastUserId] = session.userId.toString()
 
 		val systemUserBehavior = authenticationPreferences[AuthenticationPreferences.systemUserBehavior]
@@ -113,6 +125,9 @@ class SessionRepositoryImpl(
 	}
 
 	private fun setCurrentSystemSession(session: Session?) {
+		// No change in session - don't switch
+		if (session != null && currentSession.value?.userId == session.userId) return
+
 		_currentSystemSession.postValue(session)
 
 		systemApiClient.applySession(session)
@@ -127,7 +142,7 @@ class SessionRepositoryImpl(
 		if (userId == null) return null
 
 		val account = accountManagerHelper.getAccount(userId)
-		if (account == null || account.accessToken == null) return null
+		if (account?.accessToken == null) return null
 
 		return Session(
 			userId = account.id,

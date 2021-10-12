@@ -72,11 +72,9 @@
     <string name="lbl_episode_marks">എപ്പിസോഡുകളിൽ മാത്രം</string>
     <string name="lbl_hide_unwatched_count">കാണാത്ത എണ്ണം മറയ്‌ക്കുക</string>
     <string name="pref_watched_indicator">കണ്ട സൂചകങ്ങൾ കാണിക്കുക</string>
-    <string name="connect_title">ബന്ധിപ്പിക്കുക</string>
     <string name="login_help_description">കണക്റ്റുചെയ്യാൻ ജെല്ലിഫിന് ഒരു സെർവർ ആവശ്യമാണ്. Docs.jellyfin.org- ലെ ഞങ്ങളുടെ ഡോക്യുമെന്റേഷൻ സന്ദർശിക്കുക അല്ലെങ്കിൽ ജെല്ലിഫിൻ ഉപയോഗിച്ച് ആരംഭിക്കുന്നതിന് QR കോഡ് സ്കാൻ ചെയ്യുക.</string>
     <string name="login_help_title">സഹായം ആവശ്യമുണ്ട്\?</string>
     <string name="connect_manually_by_address">സെർവർ വിലാസം നൽകുക</string>
-    <string name="connect_manually_title">സ്വമേധയാ കണക്റ്റുചെയ്യുക</string>
     <string name="discovered_servers_empty">പ്രാദേശിക നെറ്റ്‌വർക്കിൽ സെർവറുകളൊന്നും കണ്ടെത്തിയില്ല.</string>
     <string name="discovered_servers_title">കണ്ടെത്തിയ സെർവറുകൾ</string>
     <string name="lbl_hidden">മറച്ചിരിക്കുന്നു</string>
@@ -111,9 +109,7 @@
     <string name="pref_default_rating">സ്ഥിരസ്ഥിതി റേറ്റിംഗ് തരം</string>
     <string name="lbl_stars">നക്ഷത്രങ്ങൾ</string>
     <string name="watch_count_overflow">99+</string>
-    <string name="lbl_manual_login">സ്വമേധയാലുള്ള ലോഗിൻ</string>
     <string name="lbl_sign_in">സൈൻ ഇൻ ചെയ്യുക</string>
-    <string name="lbl_add_server">സെർവർ ചേർക്കുക</string>
     <string name="play_with">കളിക്കുക</string>
     <string name="play_with_external_app">ബാഹ്യ അപ്ലിക്കേഷൻ ഉപയോഗിച്ച് പ്ലേ ചെയ്യുക</string>
     <string name="play_with_exo_player">ExoPlayer ഉപയോഗിച്ച് കളിക്കുക</string>
@@ -233,10 +229,7 @@
     <string name="msg_external_path">നെറ്റ്‌വർക്ക് പാതകളോ പാത്ത് പകരക്കാരനോ ഉപയോഗിച്ച് സെർവറിൽ നിങ്ങളുടെ ലൈബ്രറി ശരിയായി സജ്ജീകരിച്ചിട്ടുണ്ടെങ്കിൽ മാത്രമേ ഈ സവിശേഷത പ്രവർത്തിക്കൂ, നിങ്ങൾ ഉപയോഗിക്കുന്ന ക്ലയന്റിന് നെറ്റ്‌വർക്കിലൂടെ ഈ ലൊക്കേഷനുകൾ നേരിട്ട് ആക്‌സസ് ചെയ്യാൻ കഴിയും.</string>
     <string name="lbl_subtitle_track">സബ്ടൈറ്റിൽ ട്രാക്ക് തിരഞ്ഞെടുക്കുക</string>
     <string name="lbl_audio_track">ഓഡിയോ ട്രാക്ക് തിരഞ്ഞെടുക്കുക</string>
-    <string name="lbl_vertical_stretch">ലംബ സ്ട്രെച്ച്</string>
-    <string name="lbl_horizontal_stretch">തിരശ്ചീന സ്ട്രെച്ച്</string>
     <string name="lbl_zoom">സൂം ചെയ്യുക</string>
-    <string name="lbl_normal">സാധാരണ</string>
     <string name="desc_bitstream_ac3">കഴിവുള്ള ഹാർഡ്‌വെയർ ആവശ്യമാണ്</string>
     <string name="lbl_bitstream_ac3">ബിറ്റ്സ്ട്രീം ഡോൾബി ഡിജിറ്റൽ ഓഡിയോ</string>
     <string name="lbl_new_premieres">പുതിയ പ്രീമിയറുകൾ</string>
@@ -410,4 +403,15 @@
     <string name="lbl_coming_up">വരുന്നു</string>
     <string name="lbl_favorites">പ്രിയങ്കരങ്ങൾ</string>
     <string name="lbl_by_name">പേരുകൊണ്ട്</string>
+    <string name="enable_playback_module_description">ഇതൊരു പരീക്ഷണാത്മക സവിശേഷതയാണ്. ഒരു പിന്തുണയും നൽകിയിട്ടില്ല.</string>
+    <string name="enable_playback_module_title">പുതിയ പ്ലേബാക്ക് മൊഡ്യൂൾ പ്രവർത്തനക്ഷമമാക്കുക</string>
+    <string name="lbl_fit">സാധാരണ</string>
+    <string name="lbl_stretch">വലിച്ചുനീട്ടുക</string>
+    <string name="lbl_auto_crop">ഓട്ടോ ക്രോപ്പ്</string>
+    <string name="alphabetical">അക്ഷരമാല</string>
+    <string name="last_use">ഏറ്റവും സമീപകാലത്ത് ഉപയോഗിച്ചത്</string>
+    <string name="advanced_settings">ക്രമീകരണങ്ങൾ (വിപുലമായത്)</string>
+    <string name="always_authenticate_description">ഈ പ്രവർത്തനം പ്രവർത്തനക്ഷമമാക്കുന്നത് യാന്ത്രിക സൈൻ ഇൻ പ്രവർത്തനരഹിതമാക്കുന്നു</string>
+    <string name="always_authenticate">എപ്പോഴും ക്രെഡൻഷ്യലുകൾ ചോദിക്കുക</string>
+    <string name="lbl_community_rating">സാമൂഹിക വിലയിരുത്തൽ</string>
 </resources>

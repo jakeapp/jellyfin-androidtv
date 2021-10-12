@@ -1,7 +1,5 @@
 package org.jellyfin.androidtv.util;
 
-import static org.koin.java.KoinJavaComponent.get;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.media.AudioManager;
@@ -14,6 +12,7 @@ import org.jellyfin.androidtv.R;
 import org.jellyfin.androidtv.TvApp;
 import org.jellyfin.androidtv.preference.UserPreferences;
 import org.jellyfin.androidtv.preference.constant.AudioBehavior;
+import org.koin.java.KoinJavaComponent;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -112,8 +111,8 @@ public class Utils {
     }
 
     public static int getMaxBitrate() {
-        String maxRate = get(UserPreferences.class).get(UserPreferences.Companion.getMaxBitrate());
-        Long autoRate = get(AutoBitrate.class).getBitrate();
+        String maxRate = KoinJavaComponent.<UserPreferences>get(UserPreferences.class).get(UserPreferences.Companion.getMaxBitrate());
+        Long autoRate = KoinJavaComponent.<AutoBitrate>get(AutoBitrate.class).getBitrate();
         if (maxRate.equals(UserPreferences.MAX_BITRATE_AUTO) && autoRate != null) {
             return autoRate.intValue();
         } else {
@@ -131,12 +130,13 @@ public class Utils {
     }
 
     public static boolean downMixAudio() {
+        // FIXME: Require context
         AudioManager am = (AudioManager) TvApp.getApplication().getSystemService(Context.AUDIO_SERVICE);
         if (am.isBluetoothA2dpOn()) {
             Timber.i("Downmixing audio due to wired headset");
             return true;
         }
 
-        return DeviceUtils.isFireTv() || get(UserPreferences.class).get(UserPreferences.Companion.getAudioBehaviour()) == AudioBehavior.DOWNMIX_TO_STEREO;
+        return KoinJavaComponent.<UserPreferences>get(UserPreferences.class).get(UserPreferences.Companion.getAudioBehaviour()) == AudioBehavior.DOWNMIX_TO_STEREO;
     }
 }

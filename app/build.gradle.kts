@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-	compileSdkVersion(30)
+	compileSdk = 30
 
 	defaultConfig {
 		// Android version targets
-		minSdkVersion(21)
-		targetSdkVersion(30)
+		minSdk = 21
+		targetSdk = 30
 
 		// Release version
 		versionName = project.getVersionName()
@@ -39,6 +39,8 @@ android {
 
 			// Set flavored application name
 			resValue("string", "app_name", "@string/app_name_release")
+
+			buildConfigField("boolean", "DEVELOPMENT", "false")
 		}
 
 		val debug by getting {
@@ -50,13 +52,16 @@ android {
 
 			// Set flavored application name
 			resValue("string", "app_name", "@string/app_name_debug")
+
+			buildConfigField("boolean", "DEVELOPMENT", (defaultConfig.versionCode!! < 100).toString())
 		}
 	}
 
-	lintOptions {
+	lint {
 		lintConfig = file("$rootDir/android-lint.xml")
 		isAbortOnError = false
 		sarifReport = true
+		isCheckDependencies = true
 	}
 }
 
@@ -71,7 +76,8 @@ val versionTxt by tasks.registering {
 }
 
 dependencies {
-	// Jellyfin apiclient & SDK
+	// Jellyfin
+	implementation(projects.playback)
 	implementation(libs.jellyfin.apiclient)
 	implementation(libs.jellyfin.sdk) {
 		// Change version if desired

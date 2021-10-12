@@ -1,5 +1,7 @@
 package org.jellyfin.androidtv;
 
+import static org.koin.java.KoinJavaComponent.inject;
+
 import android.app.Activity;
 import android.app.Application;
 
@@ -8,17 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
-import org.jellyfin.androidtv.preference.UserPreferences;
-import org.jellyfin.androidtv.preference.constant.PreferredVideoPlayer;
 import org.jellyfin.androidtv.ui.livetv.TvManager;
-import org.jellyfin.androidtv.ui.playback.ExternalPlayerActivity;
 import org.jellyfin.androidtv.ui.playback.PlaybackController;
-import org.jellyfin.androidtv.ui.playback.PlaybackOverlayActivity;
 import org.jellyfin.apiclient.interaction.ApiClient;
 import org.jellyfin.apiclient.interaction.EmptyResponse;
 import org.jellyfin.apiclient.interaction.Response;
 import org.jellyfin.apiclient.model.dto.BaseItemDto;
-import org.jellyfin.apiclient.model.dto.BaseItemType;
 import org.jellyfin.apiclient.model.dto.UserDto;
 import org.jellyfin.apiclient.model.entities.DisplayPreferences;
 
@@ -26,8 +23,6 @@ import java.util.HashMap;
 
 import kotlin.Lazy;
 import timber.log.Timber;
-
-import static org.koin.java.KoinJavaComponent.inject;
 
 public class TvApp extends Application {
     public static final String DISPLAY_PREFS_APP_NAME = "ATV";
@@ -48,7 +43,6 @@ public class TvApp extends Application {
     private Activity currentActivity;
 
     private Lazy<ApiClient> apiClient = inject(ApiClient.class);
-    private Lazy<UserPreferences> userPreferences = inject(UserPreferences.class);
 
     @Override
     public void onCreate() {
@@ -102,27 +96,6 @@ public class TvApp extends Application {
         this.playbackController = playbackController;
     }
 
-    public boolean useExternalPlayer(BaseItemType itemType) {
-        switch (itemType) {
-            case Movie:
-            case Episode:
-            case Video:
-            case Series:
-            case Recording:
-                return userPreferences.getValue().get(UserPreferences.Companion.getVideoPlayer()) == PreferredVideoPlayer.EXTERNAL;
-            case TvChannel:
-            case Program:
-                return userPreferences.getValue().get(UserPreferences.Companion.getLiveTvVideoPlayer()) == PreferredVideoPlayer.EXTERNAL;
-            default:
-                return false;
-        }
-    }
-
-    @NonNull
-    public Class<? extends Activity> getPlaybackActivityClass(BaseItemType itemType) {
-        return useExternalPlayer(itemType) ? ExternalPlayerActivity.class : PlaybackOverlayActivity.class;
-    }
-
     @NonNull
     public boolean canManageRecordings() {
         UserDto currentUser = getCurrentUser();
@@ -131,7 +104,13 @@ public class TvApp extends Application {
 
     @NonNull
     public DisplayPreferences getCachedDisplayPrefs(String key) {
-        return displayPrefsCache.containsKey(key) ? displayPrefsCache.get(key) : new DisplayPreferences();
+        return getCachedDisplayPrefs(key, DISPLAY_PREFS_APP_NAME);
+    }
+
+    @NonNull
+    public DisplayPreferences getCachedDisplayPrefs(String key, String app) {
+        String cacheKey = String.format("%s.%s", app, key);
+        return displayPrefsCache.containsKey(cacheKey) ? displayPrefsCache.get(cacheKey) : new DisplayPreferences();
     }
 
     public void updateDisplayPrefs(DisplayPreferences preferences) {
@@ -139,7 +118,7 @@ public class TvApp extends Application {
     }
 
     public void updateDisplayPrefs(String app, DisplayPreferences preferences) {
-        displayPrefsCache.put(preferences.getId(), preferences);
+        displayPrefsCache.put(String.format("%s.%s", app, preferences.getId()), preferences);
         apiClient.getValue().UpdateDisplayPreferencesAsync(preferences, getCurrentUser().getId(), app, new EmptyResponse());
         Timber.d("Display prefs updated for %s isFavorite: %s", preferences.getId(), preferences.getCustomPrefs().get("FavoriteOnly"));
     }
@@ -149,9 +128,11 @@ public class TvApp extends Application {
     }
 
     public void getDisplayPrefsAsync(final String key, String app, final Response<DisplayPreferences> outerResponse) {
-        if (displayPrefsCache.containsKey(key)) {
-            Timber.d("Display prefs loaded from cache %s", key);
-            outerResponse.onResponse(displayPrefsCache.get(key));
+        String cacheKey = String.format("%s.%s", app, key);
+
+        if (displayPrefsCache.containsKey(cacheKey)) {
+            Timber.d("Display prefs loaded from cache %s", cacheKey);
+            outerResponse.onResponse(displayPrefsCache.get(cacheKey));
         } else {
             apiClient.getValue().GetDisplayPreferencesAsync(key, getCurrentUser().getId(), app, new Response<DisplayPreferences>() {
                 @Override
@@ -159,9 +140,9 @@ public class TvApp extends Application {
                     if (response.getSortBy() == null) response.setSortBy("SortName");
                     if (response.getCustomPrefs() == null)
                         response.setCustomPrefs(new HashMap<String, String>());
-                    if (app.equals(TvApp.DISPLAY_PREFS_APP_NAME))
-                        displayPrefsCache.put(key, response);
-                    Timber.d("Display prefs loaded and saved in cache %s", key);
+
+                    displayPrefsCache.put(cacheKey, response);
+                    Timber.d("Display prefs loaded and saved in cache %s", cacheKey);
                     outerResponse.onResponse(response);
                 }
 

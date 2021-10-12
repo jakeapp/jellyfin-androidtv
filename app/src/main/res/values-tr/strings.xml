@@ -28,10 +28,7 @@
     <string name="msg_external_path">Bu özellik, yalnızca kütüphanenizi sunucuda ağ yolları veya yol konumu ile doğru bir şekilde kurduysanız ve kullandığınız istemci bu konumlara ağ üzerinden doğrudan erişebiliyorsa çalışacaktır.</string>
     <string name="lbl_subtitle_track">Altyazı parçası seç</string>
     <string name="lbl_audio_track">Ses parçası seç</string>
-    <string name="lbl_vertical_stretch">Dikey Uzatma</string>
-    <string name="lbl_horizontal_stretch">Yatay Uzatma</string>
     <string name="lbl_zoom">Yakınlaşma</string>
-    <string name="lbl_normal">Normal</string>
     <string name="desc_bitstream_ac3">Kapasiteli donanım gerektirir</string>
     <string name="lbl_bitstream_ac3">Bitstream Dolby Digital ses</string>
     <string name="lbl_new_premieres">Yeni Yayınlar</string>
@@ -232,9 +229,7 @@
     <string name="pref_video_player_vlc">libVLC</string>
     <string name="lbl_from">,</string>
     <string name="lbl_playback_control_ends">Bitiş zamanı %1$s</string>
-    <string name="lbl_manual_login">Elle Giriş Yap</string>
     <string name="lbl_sign_in">Lütfen Giriş Yapın</string>
-    <string name="lbl_add_server">Sunucu Ekle</string>
     <string name="play_with">Şununla oynat</string>
     <string name="play_with_external_app">Dış bir uygulama ile oynat</string>
     <string name="play_with_exo_player">ExoPlayer ile oynat</string>

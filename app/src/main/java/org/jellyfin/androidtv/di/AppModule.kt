@@ -83,8 +83,8 @@ val appModule = module {
 
 	single<ServerRepository> { ServerRepositoryImpl(get(), get(), get(), get()) }
 
-	viewModel { LoginViewModel(get(), get()) }
-	viewModel { NextUpViewModel(get(), get(), get()) }
+	viewModel { LoginViewModel(get(), get(), get()) }
+	viewModel { NextUpViewModel(get(), get(), get(), get()) }
 
 	single { BackgroundService(get(), get(), get()) }
 }

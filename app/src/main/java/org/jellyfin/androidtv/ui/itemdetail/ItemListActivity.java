@@ -1,5 +1,7 @@
 package org.jellyfin.androidtv.ui.itemdetail;
 
+import static org.koin.java.KoinJavaComponent.inject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -38,6 +40,7 @@ import org.jellyfin.androidtv.ui.itemhandling.ItemLauncher;
 import org.jellyfin.androidtv.ui.playback.AudioEventListener;
 import org.jellyfin.androidtv.ui.playback.MediaManager;
 import org.jellyfin.androidtv.ui.playback.PlaybackController;
+import org.jellyfin.androidtv.ui.playback.PlaybackLauncher;
 import org.jellyfin.androidtv.util.ImageUtils;
 import org.jellyfin.androidtv.util.InfoLayoutHelper;
 import org.jellyfin.androidtv.util.MathUtils;
@@ -56,6 +59,7 @@ import org.jellyfin.apiclient.model.querying.ItemFields;
 import org.jellyfin.apiclient.model.querying.ItemFilter;
 import org.jellyfin.apiclient.model.querying.ItemSortBy;
 import org.jellyfin.apiclient.model.querying.ItemsResult;
+import org.koin.java.KoinJavaComponent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,8 +68,6 @@ import java.util.List;
 
 import kotlin.Lazy;
 import timber.log.Timber;
-
-import static org.koin.java.KoinJavaComponent.inject;
 
 public class ItemListActivity extends FragmentActivity {
     private int BUTTON_SIZE;
@@ -319,7 +321,7 @@ public class ItemListActivity extends FragmentActivity {
             mix.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    PlaybackHelper.playInstantMix(row.getItem().getId());
+                    PlaybackHelper.playInstantMix(ItemListActivity.this, row.getItem());
                     return true;
                 }
             });
@@ -509,8 +511,12 @@ public class ItemListActivity extends FragmentActivity {
     }
 
     private void play(List<BaseItemDto> items) {
+        PlaybackLauncher playbackLauncher = KoinJavaComponent.<PlaybackLauncher>get(PlaybackLauncher.class);
+        if (playbackLauncher.interceptPlayRequest(this, items.size() > 0 ? items.get(0) : null)) return;
+
         if ("Video".equals(mBaseItem.getMediaType())) {
-            Intent intent = new Intent(mActivity, TvApp.getApplication().getPlaybackActivityClass(mBaseItem.getBaseItemType()));
+            Class activity = KoinJavaComponent.<PlaybackLauncher>get(PlaybackLauncher.class).getPlaybackActivityClass(mBaseItem.getBaseItemType());
+            Intent intent = new Intent(mActivity, activity);
             //Resume first item if needed
             BaseItemDto first = items.size() > 0 ? items.get(0) : null;
             if (first != null && first.getUserData() != null) {
@@ -573,7 +579,7 @@ public class ItemListActivity extends FragmentActivity {
             TextUnderButton mix = new TextUnderButton(this, R.drawable.ic_mix, buttonSize, 2, getString(R.string.lbl_instant_mix), new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    PlaybackHelper.playInstantMix(mBaseItem.getId());
+                    PlaybackHelper.playInstantMix(ItemListActivity.this, mBaseItem);
                 }
             });
             mButtonRow.addView(mix);

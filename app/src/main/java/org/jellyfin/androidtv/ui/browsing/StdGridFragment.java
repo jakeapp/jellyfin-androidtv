@@ -1,5 +1,7 @@
 package org.jellyfin.androidtv.ui.browsing;
 
+import static org.koin.java.KoinJavaComponent.inject;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -50,19 +52,17 @@ import org.jellyfin.androidtv.ui.shared.IMessageListener;
 import org.jellyfin.androidtv.util.KeyProcessor;
 import org.jellyfin.androidtv.util.Utils;
 import org.jellyfin.apiclient.interaction.EmptyResponse;
-import org.jellyfin.apiclient.model.dto.BaseItemDto;
 import org.jellyfin.apiclient.model.dto.BaseItemType;
 import org.jellyfin.apiclient.model.entities.CollectionType;
 import org.jellyfin.apiclient.model.entities.DisplayPreferences;
-import org.jellyfin.apiclient.serialization.GsonJsonSerializer;
+import org.jellyfin.sdk.model.api.BaseItemDto;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import kotlin.Lazy;
+import kotlinx.serialization.json.Json;
 import timber.log.Timber;
-
-import static org.koin.java.KoinJavaComponent.get;
-import static org.koin.java.KoinJavaComponent.inject;
 
 public class StdGridFragment extends GridFragment implements IGridLoader {
     protected String MainTitle;
@@ -81,7 +81,7 @@ public class StdGridFragment extends GridFragment implements IGridLoader {
     protected String mGridDirection = GridDirection.HORIZONTAL.name();
     protected boolean determiningPosterSize = false;
 
-    protected String mParentId;
+    protected UUID mParentId;
     protected BaseItemDto mFolder;
     protected DisplayPreferences mDisplayPrefs;
 
@@ -95,7 +95,7 @@ public class StdGridFragment extends GridFragment implements IGridLoader {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mFolder = get(GsonJsonSerializer.class).DeserializeFromString(requireActivity().getIntent().getStringExtra(Extras.Folder), BaseItemDto.class);
+        mFolder = Json.Default.decodeFromString(BaseItemDto.Companion.serializer(), requireActivity().getIntent().getStringExtra(Extras.Folder));
         mParentId = mFolder.getId();
         MainTitle = mFolder.getName();
         mDisplayPrefs = TvApp.getApplication().getCachedDisplayPrefs(mFolder.getDisplayPreferencesId()); //These should have already been loaded
@@ -472,7 +472,7 @@ public class StdGridFragment extends GridFragment implements IGridLoader {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra("MusicOnly", "music".equals(mFolder.getCollectionType()) || mFolder.getBaseItemType() == BaseItemType.MusicAlbum || mFolder.getBaseItemType() == BaseItemType.MusicArtist);
+                intent.putExtra("MusicOnly", "music".equals(mFolder.getCollectionType()) || mFolder.getType().equalsIgnoreCase(BaseItemType.MusicAlbum.toString()) || mFolder.getType().equalsIgnoreCase(BaseItemType.MusicArtist.toString()));
 
                 startActivity(intent);
             }

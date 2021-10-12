@@ -69,13 +69,14 @@ class ServerFragment : Fragment() {
 		}
 		binding.users.adapter = userAdapter
 
-		loginViewModel.getUsers(server).observe(viewLifecycleOwner) { users ->
+		loginViewModel.users.observe(viewLifecycleOwner) { users ->
 			userAdapter.items = users
 
 			binding.users.isFocusable = users.any()
 			binding.noUsersWarning.isVisible = users.isEmpty()
 			binding.root.requestFocus()
 		}
+		loginViewModel.loadUsers(server)
 
 		onServerChange(server)
 
@@ -134,6 +135,9 @@ class ServerFragment : Fragment() {
 		super.onResume()
 
 		loginViewModel.reloadServers()
+
+		val server = serverIdArgument?.let(loginViewModel::getServer)
+		if (server != null) loginViewModel.loadUsers(server)
 	}
 
 	private class UserAdapter(
@@ -155,7 +159,7 @@ class ServerFragment : Fragment() {
 
 		override fun onBindViewHolder(holder: ViewHolder, user: User) {
 			holder.cardView.title = user.name
-			holder.cardView.setImage(loginViewModel.getUserImage(server, user), R.drawable.tile_port_person)
+			holder.cardView.setImage(loginViewModel.getUserImage(server, user), R.drawable.tile_port_user)
 
 			holder.cardView.setOnClickListener {
 				onItemPressed(user)

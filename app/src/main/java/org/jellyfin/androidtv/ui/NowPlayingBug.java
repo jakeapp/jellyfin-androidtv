@@ -1,6 +1,5 @@
 package org.jellyfin.androidtv.ui;
 
-import static org.koin.java.KoinJavaComponent.get;
 import static org.koin.java.KoinJavaComponent.inject;
 
 import android.content.Context;
@@ -25,6 +24,7 @@ import org.jellyfin.androidtv.util.ImageUtils;
 import org.jellyfin.androidtv.util.TimeUtils;
 import org.jellyfin.apiclient.interaction.ApiClient;
 import org.jellyfin.apiclient.model.dto.BaseItemDto;
+import org.koin.java.KoinJavaComponent;
 
 import kotlin.Lazy;
 
@@ -128,9 +128,8 @@ public class NowPlayingBug extends FrameLayout {
         if (item == null) return;
 
         Glide.with(context)
-                .load(ImageUtils.getPrimaryImageUrl(item, get(ApiClient.class)))
+                .load(ImageUtils.getPrimaryImageUrl(item, KoinJavaComponent.<ApiClient>get(ApiClient.class)))
                 .error(R.drawable.ic_album)
-                .override(35, 35)
                 .centerInside()
                 .into(npIcon);
         currentDuration = TimeUtils.formatMillis(item.getRunTimeTicks() != null ? item.getRunTimeTicks() / 10000 : 0);

@@ -1,5 +1,7 @@
 package org.jellyfin.androidtv.ui.browsing;
 
+import static org.koin.java.KoinJavaComponent.inject;
+
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
@@ -36,15 +38,13 @@ import org.jellyfin.apiclient.model.querying.ItemsResult;
 import org.jellyfin.apiclient.model.querying.LatestItemsQuery;
 import org.jellyfin.apiclient.model.querying.NextUpQuery;
 import org.jellyfin.apiclient.model.results.TimerInfoDtoResult;
+import org.koin.java.KoinJavaComponent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import kotlin.Lazy;
 import timber.log.Timber;
-
-import static org.koin.java.KoinJavaComponent.get;
-import static org.koin.java.KoinJavaComponent.inject;
 
 public class BrowseViewFragment extends EnhancedBrowseFragment {
     private boolean isLiveTvLibrary;
@@ -145,7 +145,7 @@ public class BrowseViewFragment extends EnhancedBrowseFragment {
                 mRows.add(new BrowseRowDef(TvApp.getApplication().getResources().getString(R.string.lbl_next_up), nextUpQuery, new ChangeTriggerType[]{ChangeTriggerType.TvPlayback}));
 
                 //Premieres
-                if (get(UserPreferences.class).get(UserPreferences.Companion.getPremieresEnabled())) {
+                if (KoinJavaComponent.<UserPreferences>get(UserPreferences.class).get(UserPreferences.Companion.getPremieresEnabled())) {
                     StdItemQuery newQuery = new StdItemQuery(new ItemFields[]{
                             ItemFields.DateCreated,
                             ItemFields.PrimaryImageAspectRatio,
@@ -468,10 +468,31 @@ public class BrowseViewFragment extends EnhancedBrowseFragment {
 
             GridButtonPresenter mGridPresenter = new GridButtonPresenter();
             ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(mGridPresenter);
-            gridRowAdapter.add(new GridButton(TvApp.LIVE_TV_RECORDINGS_OPTION_ID, TvApp.getApplication().getResources().getString(R.string.lbl_recorded_tv), R.drawable.tile_port_record, null));
+            gridRowAdapter.add(new GridButton(
+                TvApp.LIVE_TV_GUIDE_OPTION_ID,
+                TvApp.getApplication().getResources().getString(R.string.lbl_live_tv_guide),
+                R.drawable.tile_port_guide,
+                null
+            ));
+            gridRowAdapter.add(new GridButton(
+                TvApp.LIVE_TV_RECORDINGS_OPTION_ID,
+                TvApp.getApplication().getResources().getString(R.string.lbl_recorded_tv),
+                R.drawable.tile_port_record,
+                null
+            ));
             if (TvApp.getApplication().canManageRecordings()) {
-                gridRowAdapter.add(new GridButton(TvApp.LIVE_TV_SCHEDULE_OPTION_ID, TvApp.getApplication().getResources().getString(R.string.lbl_schedule), R.drawable.tile_port_time, null));
-                gridRowAdapter.add(new GridButton(TvApp.LIVE_TV_SERIES_OPTION_ID, TvApp.getApplication().getResources().getString(R.string.lbl_series), R.drawable.tile_port_series_timer, null));
+                gridRowAdapter.add(new GridButton(
+                    TvApp.LIVE_TV_SCHEDULE_OPTION_ID,
+                    TvApp.getApplication().getResources().getString(R.string.lbl_schedule),
+                    R.drawable.tile_port_time,
+                    null
+                ));
+                gridRowAdapter.add(new GridButton(
+                    TvApp.LIVE_TV_SERIES_OPTION_ID,
+                    TvApp.getApplication().getResources().getString(R.string.lbl_series),
+                    R.drawable.tile_port_series_timer,
+                    null
+                ));
             }
 
             mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));

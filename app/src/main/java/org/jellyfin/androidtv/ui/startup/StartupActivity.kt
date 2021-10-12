@@ -73,9 +73,6 @@ class StartupActivity : FragmentActivity(R.layout.fragment_content_view) {
 			serverRepository.migrateLegacyCredentials()
 		}
 
-		// Always restore the default session in case the "default user" changed
-		sessionRepository.restoreDefaultSession()
-
 		// Ensure basic permissions
 		networkPermissionsRequester.launch(arrayOf(Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE))
 	}
@@ -126,7 +123,7 @@ class StartupActivity : FragmentActivity(R.layout.fragment_content_view) {
 				itemIsUserView -> callApi<BaseItemDto?> {
 					apiClient.GetItemAsync(itemId, apiClient.currentUserId, it)
 				}?.let { item ->
-					suspendCoroutine<Intent?> { continuation ->
+					suspendCoroutine { continuation ->
 						ItemLauncher.createUserViewIntent(item, this) { intent ->
 							continuation.resume(intent)
 						}
@@ -141,6 +138,10 @@ class StartupActivity : FragmentActivity(R.layout.fragment_content_view) {
 			else -> null
 		} ?: Intent(this, MainActivity::class.java)
 
+
+		// Clear navigation history
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
+		Timber.d("Opening next activity $intent")
 		startActivity(intent)
 		finishAfterTransition()
 	}
